@@ -2,8 +2,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-// const cookieParser = require('cookie-parser')
-import * as cookieParser from 'cookie-parser';
+const cookieParser = require('cookie-parser')
+// import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import { json } from 'body-parser';
 import { NestExpressApplication } from '@nestjs/platform-express';
