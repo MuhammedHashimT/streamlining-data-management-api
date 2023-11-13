@@ -48,7 +48,9 @@ export class UsersController {
         {
           httpOnly: true,
           // exprires in 7 days
-          maxAge: 1000 * 60 * 60 * 24 * 7,
+          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+          sameSite: 'none',
+          secure: true,
         },
       );
       return user;
@@ -106,7 +108,10 @@ export class UsersController {
         {
           httpOnly: true,
           // exprires in 7 days
-          maxAge: 1000 * 60 * 60 * 24 * 7,
+          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+          sameSite: 'none',
+          secure: true,
+  
         },
       );
       return logged;
