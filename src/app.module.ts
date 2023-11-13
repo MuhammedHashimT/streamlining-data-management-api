@@ -14,7 +14,6 @@ import { OrganizationMiddleware } from './organizations/organization.middleware'
 @Module({
   imports: [
     // env configuration
-
     ConfigModule.forRoot({
       envFilePath: '.env',
       isGlobal: true,
