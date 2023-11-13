@@ -3,7 +3,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUser } from './dto/login-user.dto';
-import e, { Response } from 'express';
+import  { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 
 @Controller('users')
@@ -78,6 +78,28 @@ export class UsersController {
       return logged;
   }else{
     return {message : 'username or password is incorrect'}
+  }
+}
+
+// logout
+@Post('logout')
+async logout(@Res({ passthrough: true }) response: Response) {
+  response.clearCookie('user');
+  return {
+    message : 'success'
+  }
+}
+
+// get logged user
+
+@Get('logged')
+async getLogged(@Res({ passthrough: true }) response: Response) {
+  try{
+    const token = response.cookie['user'].data;
+    const data = await this.JWTService.verifyAsync(token);
+    return data;
+  }catch(e){
+    return {message : 'not logged'}
   }
 }
 
