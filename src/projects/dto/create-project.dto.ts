@@ -7,4 +7,10 @@ export class CreateProjectDto {
     description: string;
 
     data: JSON;
+
+    isPublic: boolean;
+
+    userId : number;
+
+    organizationId : number;
 }

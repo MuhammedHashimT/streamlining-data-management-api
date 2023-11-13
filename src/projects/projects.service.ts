@@ -15,10 +15,13 @@ export class ProjectsService {
   ) {
   }
 
-  create(createProjectDto: CreateProjectDto) {
+  create(createProjectDto: CreateProjectDto , user : any) {
     try{
       const project = this.projectRepository.create(createProjectDto);
-      return this.projectRepository.save(project);
+      return this.projectRepository.save({
+        ...project,
+        user : user
+      });
     }catch(e){
       throw new HttpException(
         `something went wrong`,

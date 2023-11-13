@@ -17,6 +17,11 @@ export class ProjectMiddleware implements NestMiddleware {
     const cookie = req.cookies['user'];
     const body = req.body;
 
+    if(!cookie){
+        req.user = null;
+        return res.status(401).json({message : 'unauthorized'});
+    }
+
     const verifiedUser : User = await this.userService.verifyToken(cookie);
 
     if(verifiedUser){

@@ -14,4 +14,6 @@ export class CreateUserDto {
     LastName: string;
 
     avatar: string;
+
+    isGoogler: boolean;
 }

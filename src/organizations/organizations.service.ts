@@ -14,7 +14,7 @@ export class OrganizationsService {
     private readonly userService: UsersService,
   ) {}
 
-  async create(createOrganizationDto: CreateOrganizationDto) {
+  async create(createOrganizationDto: CreateOrganizationDto , user : any) {
     // checking the username already exist
     const username = createOrganizationDto.username;
     const isUserNameExist = await this.organizationRepository.findOne({
@@ -30,20 +30,12 @@ export class OrganizationsService {
       );
     }
 
-    const owner = await this.userService.findOne(createOrganizationDto.ownerId);
-
-    if (!owner) {
-      throw new HttpException(
-        `user with id ${createOrganizationDto.ownerId} not found`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
 
     try {
       const organization = this.organizationRepository.create(
         {
           ...createOrganizationDto,
-          owner: owner,
+          owner: user,
         }
       );
 
@@ -128,14 +120,6 @@ export class OrganizationsService {
     }
 
     
-    const owner = await this.userService.findOne(updateOrganizationDto.ownerId);
-
-    if (!owner) {
-      throw new HttpException(
-        `user with id ${updateOrganizationDto.ownerId} not found`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
 
     // check if the username already exists
 
@@ -143,7 +127,6 @@ export class OrganizationsService {
       return this.organizationRepository.save({
         ...organization,
         ...updateOrganizationDto,
-        owner : owner
       });
     } catch (e) {
       throw new HttpException(

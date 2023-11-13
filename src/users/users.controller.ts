@@ -7,12 +7,13 @@ import {
   Param,
   Delete,
   Res,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUser } from './dto/login-user.dto';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 
 @Controller('users')
@@ -57,8 +58,8 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  findAllFull() {
+    return this.usersService.findAllFull();
   }
 
   @Get(':id')
@@ -126,14 +127,14 @@ export class UsersController {
   // get logged user
 
   @Get('/logged/check')
-  async getLogged(@Res({ passthrough: true }) response: Response) {
+  async getLogged(@Req() req: Request) {
     console.log('token');
     try {
-      const token = response.cookie['user'].data;
+      const token = req.cookies['user'].data;
       console.log(token);
 
       const data = await this.JWTService.verifyAsync(
-        token.data,
+        token,
 
         {
           secret: process.env.JWT_SECRET,

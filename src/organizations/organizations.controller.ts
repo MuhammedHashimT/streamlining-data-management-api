@@ -1,20 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
 import { OrganizationsService } from './organizations.service';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { UpdateOrganizationDto } from './dto/update-organization.dto';
+import { Request } from 'express';
 
 @Controller('organizations')
 export class OrganizationsController {
   constructor(private readonly organizationsService: OrganizationsService) {}
 
   @Post()
-  create(@Body() createOrganizationDto: CreateOrganizationDto) {
-    return this.organizationsService.create(createOrganizationDto);
+  create(@Body() createOrganizationDto: CreateOrganizationDto , @Req() req: Request) {
+    return this.organizationsService.create(createOrganizationDto , req.user);
   }
 
   @Get()
-  findAll() {
-    return this.organizationsService.findAll();
+  findAllFull() {
+    return this.organizationsService.findAllFull();
   }
 
   @Get(':id')

@@ -15,7 +15,4 @@ export class CreateOrganizationDto {
 
     @IsNotEmpty()
     username : string;
-
-    @IsNotEmpty()
-    ownerId : number;
 }

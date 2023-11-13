@@ -220,9 +220,9 @@ async create(createUserDto: CreateUserDto) {
 
   async verifyToken(token : any){
     // verify the token of jwt
-    console.log(token);
+    console.log(token?.data);
     
-    const tokenData = await this.jwtService.verify(JSON.stringify(token) ,
+    const tokenData = await this.jwtService.verify(token?.data,
       {
         secret :  process.env.JWT_SECRET,
       });
