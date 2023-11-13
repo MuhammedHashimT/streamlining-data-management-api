@@ -11,13 +11,19 @@ export class Organization {
     @Column()
     name : string;
 
-    @Column()
+    @Column({
+        nullable : true
+    })
     description : string;
 
-    @Column()
+    @Column({
+        nullable : true
+    })
     logo : string;
 
-    @Column()
+    @Column({
+        nullable : true
+    })
     website : string;
 
     @Column()

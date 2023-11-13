@@ -218,9 +218,14 @@ async create(createUserDto: CreateUserDto) {
     return user;
   }
 
-  async verifyToken(token : string){
+  async verifyToken(token : any){
     // verify the token of jwt
-    const tokenData = await this.jwtService.verifyAsync(token);
+    console.log(token);
+    
+    const tokenData = await this.jwtService.verify(JSON.stringify(token) ,
+      {
+        secret :  process.env.JWT_SECRET,
+      });
 
     // check if the user exist
     const user = await this.userRepository.findOne({
@@ -239,5 +244,5 @@ async create(createUserDto: CreateUserDto) {
     return user;
 
   }
-  
+
 }

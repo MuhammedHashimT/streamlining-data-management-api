@@ -1,39 +1,58 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Res,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUser } from './dto/login-user.dto';
-import  { Response } from 'express';
+import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService ,
-    private readonly JWTService : JwtService
-    ) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly JWTService: JwtService,
+  ) {}
 
   @Post()
- async create(@Body() createUserDto: CreateUserDto , @Res({ passthrough: true }) response: Response) {
-   const user = await this.usersService.create(createUserDto);
-   const token = await this.JWTService.signAsync({
-      FirstName : user.FirstName,
-      LastName : user.LastName,
-      email : user.email,
-      username : user.username,
-      id : user.id
-   });
-   if(user){
-    response.cookie('user',
+  async create(
+    @Body() createUserDto: CreateUserDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const user = await this.usersService.create(createUserDto);
+    const token = await this.JWTService.signAsync({
+      FirstName: user.FirstName,
+      LastName: user.LastName,
+      email: user.email,
+      username: user.username,
+      id: user.id,
+    },
     {
-      data : token
-    },{
-      httpOnly : true ,
-      // exprires in 7 days
-      maxAge : 1000 * 60 * 60 * 24 * 7,
+      secret: process.env.JWT_SECRET,
     });
-    return user;
-   }else{
-      return {message : 'something went wrong'}
+    if (user) {
+      response.cookie(
+        'user',
+        {
+          data: token,
+        },
+        {
+          httpOnly: true,
+          // exprires in 7 days
+          maxAge: 1000 * 60 * 60 * 24 * 7,
+        },
+      );
+      return user;
+    } else {
+      return { message: 'something went wrong' };
     }
   }
 
@@ -58,49 +77,71 @@ export class UsersController {
   }
 
   @Post('login')
- async login(@Body() loginUserDto: LoginUser , @Res({ passthrough: true }) response: Response) {
-    const logged = await  this.usersService.login(loginUserDto.username,loginUserDto.password);
+  async login(
+    @Body() loginUserDto: LoginUser,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const logged = await this.usersService.login(
+      loginUserDto.username,
+      loginUserDto.password,
+    );
     const token = await this.JWTService.signAsync({
-      FirstName : logged.FirstName,
-      LastName : logged.LastName,
-      email : logged.email,
-      username : logged.username,
-      id : logged.id
-   });
-    if(logged){
-      response.cookie('user',{
-        data : token
-      },{
-        httpOnly : true ,
-        // exprires in 7 days
-        maxAge : 1000 * 60 * 60 * 24 * 7,
-      });
+      FirstName: logged.FirstName,
+      LastName: logged.LastName,
+      email: logged.email,
+      username: logged.username,
+      id: logged.id,
+    },
+    {
+      secret: process.env.JWT_SECRET,
+    }
+    );
+    if (logged) {
+      response.cookie(
+        'user',
+        {
+          data: token,
+        },
+        {
+          httpOnly: true,
+          // exprires in 7 days
+          maxAge: 1000 * 60 * 60 * 24 * 7,
+        },
+      );
       return logged;
-  }else{
-    return {message : 'username or password is incorrect'}
+    } else {
+      return { message: 'username or password is incorrect' };
+    }
   }
-}
 
-// logout
-@Post('logout')
-async logout(@Res({ passthrough: true }) response: Response) {
-  response.clearCookie('user');
-  return {
-    message : 'success'
+  // logout
+  @Post('logout')
+  async logout(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie('user');
+    return {
+      message: 'success',
+    };
   }
-}
 
-// get logged user
+  // get logged user
 
-@Get('logged')
-async getLogged(@Res({ passthrough: true }) response: Response) {
-  try{
-    const token = response.cookie['user'].data;
-    const data = await this.JWTService.verifyAsync(token);
-    return data;
-  }catch(e){
-    return {message : 'not logged'}
+  @Get('/logged/check')
+  async getLogged(@Res({ passthrough: true }) response: Response) {
+    console.log('token');
+    try {
+      const token = response.cookie['user'].data;
+      console.log(token);
+
+      const data = await this.JWTService.verifyAsync(
+        token.data,
+
+        {
+          secret: process.env.JWT_SECRET,
+        },
+      );
+      return data;
+    } catch (e) {
+      return { message: 'not logged' };
+    }
   }
-}
-
 }

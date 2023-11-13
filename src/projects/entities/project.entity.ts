@@ -10,10 +10,14 @@ export class Project {
     @Column( )
     name : string;
 
-    @Column()
+    @Column({
+        nullable : true
+    })
     description : string;
 
-    @Column({ type: 'json' })
+    @Column({ type: 'json' , 
+        nullable : true
+     })
     data : JSON;
 
     @Column({

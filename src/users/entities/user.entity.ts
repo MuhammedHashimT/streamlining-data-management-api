@@ -12,7 +12,9 @@ export class User {
     @Column()
     FirstName : string;
 
-    @Column()
+    @Column({
+        nullable : true
+    })
     LastName : string;
 
     @Column()
@@ -24,14 +26,16 @@ export class User {
     @Column()
     password : string;
 
-    @Column()
+    @Column({
+        nullable : true
+    })
     avatar : string;
 
     @Column({
         default : false
     })
     isGoogler : boolean;
-    
+
     // One to Many
 
     @OneToMany(() => Project , (project : Project) => project.user)

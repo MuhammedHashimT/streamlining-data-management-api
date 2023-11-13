@@ -10,6 +10,8 @@ import { OrganizationsModule } from './organizations/organizations.module';
 import { OrgUsersModule } from './org-users/org-users.module';
 import { ProjectMiddleware } from './projects/projects.middleware';
 import { OrganizationMiddleware } from './organizations/organization.middleware';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -23,13 +25,13 @@ import { OrganizationMiddleware } from './organizations/organization.middleware'
 
     // config of JWT
 
-    // PassportModule.register({ defaultStrategy: 'jwt' }),
-    // JwtModule.registerAsync({
-    //   useFactory: async () => ({
-    //     secret: process.env.JWT_SECRET,
-    //     signOptions: { expiresIn: '1d' },
-    //   }),
-    // }),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.registerAsync({
+      useFactory: async () => ({
+        secret: process.env.JWT_SECRET,
+        signOptions: { expiresIn: '1d' },
+      }),
+    }),
 
     // connecting to mysql planetscale server
 
