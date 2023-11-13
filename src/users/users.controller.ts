@@ -18,7 +18,7 @@ export class UsersController {
    const token = await this.JWTService.signAsync({
       FirstName : user.FirstName,
       LastName : user.LastName,
-      Email : user.email,
+      email : user.email,
       username : user.username,
       id : user.id
    });
@@ -63,7 +63,7 @@ export class UsersController {
     const token = await this.JWTService.signAsync({
       FirstName : logged.FirstName,
       LastName : logged.LastName,
-      Email : logged.email,
+      email : logged.email,
       username : logged.username,
       id : logged.id
    });

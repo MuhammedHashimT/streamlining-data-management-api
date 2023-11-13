@@ -31,6 +31,7 @@ export class User {
         default : false
     })
     isGoogler : boolean;
+    
     // One to Many
 
     @OneToMany(() => Project , (project : Project) => project.user)

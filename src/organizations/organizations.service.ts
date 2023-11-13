@@ -69,12 +69,27 @@ export class OrganizationsService {
     }
   }
 
+  async findAllFull() {
+    try {
+      const organizations = await this.organizationRepository.find({
+        relations: ['owner' , 'projects' , 'orgUsers' , 'orgUsers.user'],
+      });
+      return organizations;
+    } catch (e) {
+      throw new HttpException(
+        `something went wrong`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   async findOne(id: number) {
     try {
       const organizations = await this.organizationRepository.findOne({
         where: {
           id: id,
         },
+        relations: ['owner' , 'projects' , 'orgUsers' , 'orgUsers.user'],
       });
       return organizations;
     } catch (e) {

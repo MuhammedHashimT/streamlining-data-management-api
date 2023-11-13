@@ -1,7 +1,7 @@
 import { OrgUser } from "src/org-users/entities/org-user.entity";
 import { Project } from "src/projects/entities/project.entity";
 import { User } from "src/users/entities/user.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Organization {
@@ -36,4 +36,10 @@ export class Organization {
     // Many To One
     @ManyToOne(() => User , (user : User) => user.ownerOrganizations)
     owner : User;
+
+    @CreateDateColumn()
+    createdAt : Date;
+
+    @UpdateDateColumn()
+    updatedAt : Date;
 }

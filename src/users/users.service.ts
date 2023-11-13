@@ -67,13 +67,28 @@ async create(createUserDto: CreateUserDto) {
     }
   }
 
+  async findAllFull() {
+    try{
+      const users =await this.userRepository.find({
+        relations : ['projects' , 'collaborations' , 'orgUsers' , 'ownerOrganizations' , 'orgUsers.organization' ]
+      });
+      return users;
+    }catch(e){
+      throw new HttpException(
+        `something went wrong`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      )
+    }
+  }
+
   async findOne(id: number) {
     try{
       const users =await this.userRepository.findOne(
         {
           where : {
             id : id
-          }
+          },
+        relations : ['projects' , 'collaborations' , 'orgUsers' , 'ownerOrganizations' , 'orgUsers.organization' ]
         }
       );
       return users;
@@ -164,6 +179,20 @@ async create(createUserDto: CreateUserDto) {
   }
 
   async login(username : string,password : string){
+
+    // check is it admin
+
+    if(username == process.env.ADMIN_USERNAME && password == process.env.ADMIN_PASSWORD){
+      return {
+        username : 'admin',
+        isAdmin : true ,
+        FirstName : "Admin",
+      LastName : "Admin",
+      email : "Admin",
+      id : "Admin"
+      }
+    }
+
     const user = await this.userRepository.findOne({
       where : {
         username : username

@@ -39,13 +39,28 @@ export class ProjectsService {
     }
   }
 
+  async findAllFull() {
+    try{
+      const projects =await this.projectRepository.find({
+        relations : ['collaborators' , 'user' , 'organization'  ]
+      });
+      return projects;
+    }catch(e){
+      throw new HttpException(
+        `something went wrong`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      )
+    }
+  }
+
   async findOne(id: number) {
     try{
       const project =await this.projectRepository.findOne(
         {
           where : {
             id : id
-          }
+          },
+          relations : ['collaborators' , 'user' , 'organization' ]
         }
       );
       return project;

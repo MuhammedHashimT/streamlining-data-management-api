@@ -53,7 +53,9 @@ export class OrgUsersService {
 
   async findAll() {
     try {
-      const orgUsers = await this.orgUserRepository.find();
+      const orgUsers = await this.orgUserRepository.find({
+        relations: ['user', 'organization'],
+      });
 
       return orgUsers;
     } catch (e) {
@@ -70,6 +72,7 @@ export class OrgUsersService {
         where: {
           id: id,
         },
+        relations: ['user', 'organization'],
       });
 
       return orgUsers;
