@@ -13,7 +13,7 @@ export class OrganizationsController {
     return this.organizationsService.create(createOrganizationDto , req.user);
   }
 
-  @Get()
+  @Get('full')
   findAllFull() {
     return this.organizationsService.findAllFull();
   }

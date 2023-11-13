@@ -19,7 +19,7 @@ export class ProjectsController {
     return this.projectsService.findAll();
   }
 
-  @Get()
+  @Get('/full')
   findAllFull() {
     return this.projectsService.findAllFull();
   }

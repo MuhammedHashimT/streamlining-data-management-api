@@ -57,7 +57,7 @@ export class UsersController {
     }
   }
 
-  @Get()
+  @Get('full')
   findAllFull() {
     return this.usersService.findAllFull();
   }
