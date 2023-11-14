@@ -59,6 +59,11 @@ export class UsersController {
     }
   }
 
+    @Get()
+  findAll() {
+    return this.usersService.findAll();
+  }
+
   @Get('full')
   findAllFull() {
     return this.usersService.findAllFull();
